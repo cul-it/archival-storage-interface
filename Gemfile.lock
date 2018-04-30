@@ -40,6 +40,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    ansi (1.5.0)
     arel (8.0.0)
     autoprefixer-rails (8.3.0)
       execjs
@@ -84,6 +85,12 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
+    coveralls (0.7.1)
+      multi_json (~> 1.3)
+      rest-client
+      simplecov (>= 0.7)
+      term-ansicolor
+      thor
     crass (1.0.4)
     deprecation (1.0.0)
       activesupport
@@ -95,6 +102,10 @@ GEM
       warden (~> 1.2.3)
     devise-guests (0.6.0)
       devise
+    diff-lcs (1.3)
+    docile (1.3.0)
+    domain_name (0.5.20180417)
+      unf (>= 0.0.5, < 1.0.0)
     dot-properties (0.1.3)
     erubi (1.7.1)
     execjs (2.7.0)
@@ -104,6 +115,9 @@ GEM
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hashie (3.5.7)
+    hirb (0.7.3)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
     httpclient (2.8.3)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
@@ -114,6 +128,7 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
+    json (2.1.0)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.1.1)
@@ -142,11 +157,15 @@ GEM
     marc-fastxmlwriter (1.0.0)
       marc (~> 1.0)
     method_source (0.9.0)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     multi_json (1.13.1)
     multipart-post (2.0.0)
+    netrc (0.11.0)
     nio4r (2.3.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
@@ -186,10 +205,27 @@ GEM
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
+    rest-client (2.0.2)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     retriable (3.1.1)
     rsolr (2.1.0)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
+    rspec (3.7.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+    rspec-core (3.7.1)
+      rspec-support (~> 3.7.0)
+    rspec-expectations (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-mocks (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-support (3.7.1)
     ruby-progressbar (1.9.0)
     ruby_dep (1.5.0)
     rubyzip (1.2.1)
@@ -208,6 +244,15 @@ GEM
     selenium-webdriver (3.11.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
+    simplecov (0.16.1)
+      docile (~> 1.1)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-console (0.4.2)
+      ansi
+      hirb
+      simplecov
+    simplecov-html (0.10.2)
     slop (3.6.0)
     solr_wrapper (1.2.0)
       faraday
@@ -227,9 +272,12 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.3.13)
+    term-ansicolor (1.6.0)
+      tins (~> 1.0)
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
+    tins (1.16.3)
     traject (2.3.4)
       concurrent-ruby (>= 0.8.0)
       dot-properties (>= 0.1.1)
@@ -276,6 +324,7 @@ DEPENDENCIES
   byebug
   capybara (~> 2.13)
   coffee-rails (~> 4.2)
+  coveralls
   devise
   devise-guests (~> 0.6)
   jbuilder (~> 2.5)
@@ -283,9 +332,13 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   puma (~> 3.7)
   rails (~> 5.1.6)
+  rake
   rsolr (>= 1.0)
+  rspec
   sass-rails (~> 5.0)
   selenium-webdriver
+  simplecov
+  simplecov-console
   solr_wrapper (>= 0.3)
   spring
   spring-watcher-listen (~> 2.0.0)
