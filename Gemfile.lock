@@ -92,6 +92,7 @@ GEM
       term-ansicolor
       thor
     crass (1.0.4)
+    database_cleaner (1.7.0)
     deprecation (1.0.0)
       activesupport
     devise (4.4.3)
@@ -225,6 +226,14 @@ GEM
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
+    rspec-rails (3.7.2)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+      rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
     ruby-progressbar (1.9.0)
     ruby_dep (1.5.0)
@@ -325,6 +334,7 @@ DEPENDENCIES
   capybara (~> 2.13)
   coffee-rails (~> 4.2)
   coveralls
+  database_cleaner
   devise
   devise-guests (~> 0.6)
   jbuilder (~> 2.5)
@@ -335,6 +345,7 @@ DEPENDENCIES
   rake
   rsolr (>= 1.0)
   rspec
+  rspec-rails
   sass-rails (~> 5.0)
   selenium-webdriver
   simplecov
