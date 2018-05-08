@@ -1,0 +1,67 @@
+[
+		{
+				id: "b17417d487037a092a0d7db2051e1492"
+				depositor_s: "Africana",
+				collection_s: "ASRCLectures",
+				subcollection_s: "",
+				steward_s: "ea18",
+				filename_s: "AFR_2465400_V0118_07_exiftool.xml",
+				fullpath_s: "/AFR_2465400_V0118_07/AFR_2465400_V0118_07_exiftool.xml"
+				location_t: [
+						"s3://s3-cular/Africana/ASRCLectures/AFR_2465400",
+						"smb://files.library.cornell.edu/lib/archival01/Africana/ASRCLectures"],
+				sha1_s: "1d4f909f51a8cf1bcf0cf4867b16c8468254e7f8",
+				size_l: 5714,
+				bibid_s: "2465400"
+				type_s: "EXIF Metadata"
+		},
+		{
+				id: "34c43d6c8534ba525a88e3625411a28d"
+				depositor_s: "Africana",
+				collection_s: "ASRCLectures",
+				subcollection_s: "",
+				steward_s: "ea18",
+				filename_s: "AFR_2465400_V0118_07.mp4",
+				fullpath_s: "/AFR_2465400_V0118_07/AFR_2465400_V0118_07.mp4"
+				location_t: [
+						"s3://s3-cular/Africana/ASRCLectures",
+						"smb://files.library.cornell.edu/lib/archival01/Africana/ASRCLectures"],
+				sha1_s: "9dab4d01ae2ad6fce012ae38588b405239db8833",
+				size_l: 2886387259,
+				bibid_s: "2465400",
+				type_s: "MP4 Video"
+		},
+		{
+				id: "45c43d6c8534ba525a88e3625411a28d"
+				depositor_s: "arXiv",
+				collection_s: "arXiv",
+				subcollection_s: "",
+				steward_s: "oyr1",
+				filename_s: "9107.zip",
+				fullpath_s: "/9107/2017-11-22/9107.zip"
+				location_t: [
+						"s3://s3-cular/arXiv/arXiv",
+						"smb://files.library.cornell.edu/lib/archival02/arXiv/arXiv"
+				]
+				sha1_s: "bd03f1f4302bb7da67cb7bbac42c82a30feb9660",
+				size_l: 556051,
+				type_s: "ZIP archive"
+		},
+		{
+				id: "65c43d6c8534ba525a88e3625411a28d"
+				depositor_s: "arXiv",
+				collection_s: "arXiv",
+				subcollection_s: "",
+				steward_s: "oyr1",
+				filename_s: "metatdata_9107.zip",
+				fullpath_s: "/9107/2017-11-22/metadata_9107.zip"
+				location_t: [
+						"s3://s3-cular/arXiv/arXiv",
+						"smb://files.library.cornell.edu/lib/archival02/arXiv/arXiv"
+				]
+				sha1_s: "030b5b7253c20ec7ceca5ab87d6d33bf5fd05874",
+				size_l: 11788,
+				type_s: "ZIP archive"
+		},
+		
+]
