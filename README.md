@@ -5,5 +5,3 @@
 This is an interface for discovery and searching the CUL Archival Storage.
 
 It is a Blacklight/SOLR-based Ruby-on-Rails application.
-
-Please go to the issues page to add new issues.
