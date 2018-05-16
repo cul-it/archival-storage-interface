@@ -51,6 +51,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'depositor_s', label: 'Depositor'
     config.add_facet_field 'collection_s', label: 'Colllection'
     config.add_facet_field 'subcollection_s', label: 'Subcollection'
+    config.add_facet_field 'type_s', label: 'Type'
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -61,20 +62,26 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
     config.add_index_field 'depositor_s', label: 'Depositor'
     config.add_index_field 'collection_s', label: 'Collection'
-    config.add_index_field 'subcollection_s', label: 'Subcollection'
-    config.add_index_field 'filename_s', label: 'Filename'
+    config.add_index_field 'type_s', label: 'Type'
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
     config.add_show_field 'depositor_s', label: 'Depositor'
     config.add_show_field 'collection_s', label: 'Collection'
-    config.add_show_field 'subcollection_s', label: 'Subcollection'
     config.add_show_field 'filename_s', label: 'Filename'
+    config.add_show_field 'fullpath_s', label: 'Full Path'
     config.add_show_field 'location_t', label: 'Locations'
     config.add_show_field 'steward_s', label: 'Steward'
     config.add_show_field 'size_l', label: 'File Size'
+    config.add_show_field 'bibid_s', label: 'bibid_s'
     config.add_show_field 'type_s', label: 'File Type'
 
+    config.default_solr_params = {
+      :qt => 'search',
+      :rows => 10,
+      :fl => '*',
+    }
+    
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
     #
