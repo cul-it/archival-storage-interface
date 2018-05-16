@@ -16,6 +16,12 @@
     </li>
     <li>Use the facets to the left to limit your search, or to browse what is available.</li>
     <li>Submit <a href='https://github.com/cul-it/archival-storage-interface/issues'>issues</a> to GitHub to suggest changes and report bugs</li>
+		<li>Known issues:
+			<ul>
+				<li>File type search requires quotes around all file types with spaces in them -- which is all of them in this test data. Search for '"ZIP archive"' instead of 'ZIP archive'.</li>
+				<li>Checksum search works, but requires full SHA1 checksum, not just a prefix. Should we also search the md5 checksum on the files, if available?</li>
+			</ul>
+		</li>
   </ol>
 </div>
 
