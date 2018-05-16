@@ -9,10 +9,11 @@ class CatalogController < ApplicationController
 
     ## Default parameters to send to solr for all search-like requests. See also SearchBuilder#processed_parameters
     config.default_solr_params = {
-      rows: 10
+      rows: 10,
+      qt: 'search',
+      fl: '*'
     }
-
-
+ 
     # solr field configuration for search results/index views
     config.index.title_field = 'filename_s'
     config.index.show_link = 'filename_s'
@@ -76,11 +77,6 @@ class CatalogController < ApplicationController
     config.add_show_field 'bibid_s', label: 'bibid_s'
     config.add_show_field 'type_s', label: 'File Type'
 
-    config.default_solr_params = {
-      :qt => 'search',
-      :rows => 10,
-      :fl => '*',
-    }
     
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -101,7 +97,34 @@ class CatalogController < ApplicationController
     # since we aren't specifying it otherwise.
 
     config.add_search_field 'all_fields', label: 'All Fields'
+    config.add_search_field('Checksum') do |field|
+      field.solr_parameters = {
+        qf: 'sha1_s',
+        pf: 'sha1_s'
+      }
+    end
 
+    config.add_search_field("File Type") do |field|
+      field.solr_parameters = {
+        qf: 'type_s',
+        pf: 'type_s'
+      }
+    end
+
+    config.add_search_field("Steward") do |field|
+      field.solr_parameters = {
+        qf: 'steward_s',
+        pf: 'steward_s',
+      }
+    end
+
+    config.add_search_field("Bibid") do |field|
+      field.solr_parameters = {
+        qf: 'bibid_s',
+        pf: 'bibid_s'
+      }
+    end
+    
 
     # Now we see how to over-ride Solr request handler defaults, in this
     # case for a BL "search field", which is really a dismax aggregate
