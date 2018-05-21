@@ -15,8 +15,8 @@ class CatalogController < ApplicationController
     }
  
     # solr field configuration for search results/index views
-    config.index.title_field = 'filename_s'
-    config.index.show_link = 'filename_s'
+    config.index.title_field = 'filename_ssi'
+    config.index.show_link = 'filename_ssi'
     config.index.display_type_field = 'format'
     #config.index.thumbnail_field = 'thumbnail_path_ss'
 
@@ -49,10 +49,9 @@ class CatalogController < ApplicationController
     #  (useful when user clicks "more" on a large facet and wants to navigate alphabetically across a large set of results)
     # :index_range can be an array or range of prefixes that will be used to create the navigation (note: It is case sensitive when searching values)
 
-    config.add_facet_field 'depositor_s', label: 'Depositor'
-    config.add_facet_field 'collection_s', label: 'Colllection'
-    config.add_facet_field 'subcollection_s', label: 'Subcollection'
-    config.add_facet_field 'type_s', label: 'Type'
+    config.add_facet_field 'depositor_tesi', label: 'Depositor'
+    config.add_facet_field 'collection_tesi', label: 'Colllection'
+    config.add_facet_field 'type_tesi', label: 'Type'
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -61,21 +60,21 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
-    config.add_index_field 'depositor_s', label: 'Depositor'
-    config.add_index_field 'collection_s', label: 'Collection'
-    config.add_index_field 'type_s', label: 'Type'
+    config.add_index_field 'depositor_tesi', label: 'Depositor'
+    config.add_index_field 'collection_tesi', label: 'Collection'
+    config.add_index_field 'type_tesi', label: 'Type'
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
-    config.add_show_field 'depositor_s', label: 'Depositor'
-    config.add_show_field 'collection_s', label: 'Collection'
-    config.add_show_field 'filename_s', label: 'Filename'
-    config.add_show_field 'fullpath_s', label: 'Full Path'
-    config.add_show_field 'location_t', label: 'Locations'
-    config.add_show_field 'steward_s', label: 'Steward'
-    config.add_show_field 'size_l', label: 'File Size'
-    config.add_show_field 'bibid_s', label: 'bibid_s'
-    config.add_show_field 'type_s', label: 'File Type'
+    config.add_show_field 'depositor_tesi', label: 'Depositor'
+    config.add_show_field 'collection_tesi', label: 'Collection'
+    config.add_show_field 'filename_ssi', label: 'Filename'
+    config.add_show_field 'fullpath_ssi', label: 'Full Path'
+    config.add_show_field 'location_ssm', label: 'Locations'
+    config.add_show_field 'steward_ssi', label: 'Steward'
+    config.add_show_field 'size_lsi', label: 'File Size'
+    config.add_show_field 'bibid_ssi', label: 'Bibid'
+    config.add_show_field 'type_tesi', label: 'File Type'
 
     
     # "fielded" search configuration. Used by pulldown among other places.
@@ -99,29 +98,29 @@ class CatalogController < ApplicationController
     config.add_search_field 'all_fields', label: 'All Fields'
     config.add_search_field('Checksum') do |field|
       field.solr_parameters = {
-        qf: 'sha1_s',
-        pf: 'sha1_s'
+        qf: 'sha1_tesig',
+        pf: 'sha1_tesig'
       }
     end
 
     config.add_search_field("File Type") do |field|
       field.solr_parameters = {
-        qf: 'type_s',
-        pf: 'type_s'
+        qf: 'type_tesi',
+        pf: 'type_tesi'
       }
     end
 
     config.add_search_field("Steward") do |field|
       field.solr_parameters = {
-        qf: 'steward_s',
-        pf: 'steward_s',
+        qf: 'steward_ssi',
+        pf: 'steward_ssi',
       }
     end
 
     config.add_search_field("Bibid") do |field|
       field.solr_parameters = {
-        qf: 'bibid_s',
-        pf: 'bibid_s'
+        qf: 'bibid_ssi',
+        pf: 'bibid_ssi'
       }
     end
     

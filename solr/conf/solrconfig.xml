@@ -85,72 +85,20 @@
        -->
 
        <str name="qf">
-				 depositor_s
-				 collection_s
-				 steward_s
-				 filename_s
-				 sha1_s
-				 type_s
+				 depositor_tesi
+				 collection_tesi
+				 steward_tesi
+				 filename_ssi
+				 sha1_tesig
+				 type_tesi
        </str>
        <str name="pf">
-				 depositor_s
-				 collection_s
-				 steward_s
-				 filename_s
-				 sha1_s
-				 type_s
-       </str>
-       <str name="author_qf">
-         author_unstem_search^200
-         author_addl_unstem_search^50
-         author_t^20
-         author_addl_t
-       </str>
-       <str name="author_pf">
-         author_unstem_search^2000
-         author_addl_unstem_search^500
-         author_t^200
-         author_addl_t^10
-       </str>
-       <str name="title_qf">
-         title_unstem_search^50000
-         subtitle_unstem_search^25000
-         title_addl_unstem_search^10000
-         title_t^5000
-         subtitle_t^2500
-         title_addl_t^100
-         title_added_entry_unstem_search^50
-         title_added_entry_t^10
-         title_series_unstem_search^5
-         title_series_t
-       </str>
-       <str name="title_pf">
-         title_unstem_search^500000
-         subtitle_unstem_search^250000
-         title_addl_unstem_search^100000
-         title_t^50000
-         subtitle_t^25000
-         title_addl_t^1000
-         title_added_entry_unstem_search^500
-         title_added_entry_t^100
-         title_series_t^50
-         title_series_unstem_search^10
-       </str>
-       <str name="subject_qf">
-         subject_topic_unstem_search^200
-         subject_unstem_search^125
-         subject_topic_facet^100
-         subject_t^50
-         subject_addl_unstem_search^10
-         subject_addl_t
-       </str>
-       <str name="subject_pf">
-         subject_topic_unstem_search^2000
-         subject_unstem_search^1250
-         subject_t^1000
-         subject_topic_facet^500
-         subject_addl_unstem_search^100
-         subject_addl_t^10
+				 depositor_tesi
+				 collection_tesi
+				 steward_tesi
+				 filename_ssi
+				 sha1_tesig
+				 type_tesi
        </str>
        
        <int name="ps">3</int>
@@ -159,20 +107,21 @@
        <!-- NOT using marc_display because it is large and will slow things down for search results -->
        <str name="fl">
          id,
-				 depositor_s,
-				 collection_s,
-				 steward_s,
-				 filename_s,
-				 sha1_s,
-				 type_s,
+				 depositor_tesi,
+				 collection_tesi,
+				 steward_tesi,
+				 filename_ssi,
+				 sha1_tesig,
+				 type_tesi,
        </str>
+			
 
        <str name="facet">true</str>
        <str name="facet.mincount">1</str>
-       <str name="facet.field">depositor_s</str>
-       <str name="facet.field">collection_s</str>
-       <str name="facet.field">steward_s</str>
-       <str name="facet.field">type_s</str>
+       <str name="facet.field">depositor_tesi</str>
+       <str name="facet.field">collection_tesi</str>
+       <str name="facet.field">steward_tesi</str>
+       <str name="facet.field">type_tesi</str>
      </lst>
     <!-- In addition to defaults, "appends" params can be specified
          to identify values which should be appended to the list of
