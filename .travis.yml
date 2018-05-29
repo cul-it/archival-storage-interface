@@ -3,3 +3,8 @@ rvm:
  - 2.4
 
 
+before_script:
+- bundle exec rake solr:start
+
+after_script:
+- bundle exec rake solr:stop
