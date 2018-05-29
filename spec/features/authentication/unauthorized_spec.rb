@@ -1,9 +1,25 @@
 require 'rails_helper'
 
 RSpec.feature "Unauthorized Access", type: :feature do
-  scenario "search for Africana facet without logging in first" do
-    visit "/?f%5Bdepositor_tesi%5D%5B%5D=africana"
+  scenario "Go to home page without logging in first" do
+    visit "/"
 
     expect(page).to have_text("Forgot your password?")
+  end
+end
+
+RSpec.feature "Authorized Access", type: :feature do
+  scenario "Log in and reach home page" do
+
+    user = FactoryBot.create(:user)
+    
+    
+    visit "/"
+
+    fill_in('user_email', with: user.email)
+    fill_in('user_password', with: user.password)
+    click_button('Log in')
+
+    expect(page).to have_text('Signed in successfully.')
   end
 end
