@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
+  before_action :authenticate_user!
 
   include Blacklight::Catalog
   include Blacklight::Marc::Catalog
