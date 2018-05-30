@@ -4,7 +4,7 @@ rvm:
 
 
 before_script:
-- bundle exec rake solr:start
+- bundle exec rake bl:start
 
 after_script:
 - bundle exec rake solr:stop
