@@ -46,6 +46,7 @@ namespace :manifest do
           locations: [],
           bibid: filedata["bibid"],
           sha1: filedata["sha1"],
+          md5: filedata["md5"],
           size: filedata["size"],
         }
       end
@@ -83,10 +84,10 @@ namespace :manifest do
 
       # split it on last /, so a depositor collection of A/B/C should have depositor A/B, collection C
       matchdata = /(.*)\/([^\/]*)/.match(depcollection)
-      (depositor_tesi, collection_tesi) = matchdata[1,2]
+      (depositor_ssi, collection_ssi) = matchdata[1,2]
 
-      phys_coll_id_tesi = collection["phys_coll_id"] || "No physical collection"
-      steward_tesi = collection["steward"] || "No collection steward"
+      phys_coll_id_ssi = collection["phys_coll_id"] || "No physical collection"
+      steward_ssi = collection["steward"] || "No collection steward"
       collection_locations = collection["locations"]
 
       files = collection["files"]
@@ -95,7 +96,7 @@ namespace :manifest do
         filename_ssi = file["filename"]
         fullpath_ssi = file["path"] + "/" + filename_ssi
         location_ssm = collection_locations + (file["locations"] || [])
-        partOf_tesi = file["partOf"]
+        partOf_ssi = file["partOf"]
         bibid_ssi = file["bibid"]
         rmcmediano_ssi = file["rmcmediano"]
         sha1_tesig = file["sha1"]
@@ -105,27 +106,37 @@ namespace :manifest do
         rawid = "#{depcollection}/#{fullpath_ssi}"
         id = Digest::MD5.hexdigest(rawid)
 
-        type_tesi = filename_ssi[-3..-1] || filename_ssi
+        type_ssi = filename_ssi[-3..-1] || filename_ssi
+
+        # find the archival shares
+
+        shares_ssim = []
+        location_ssm.each do |l|
+          if /(?<share>archival\d\d)/ =~ l then
+            shares_ssim.push share
+          end
+        end
 
         # now put it into a solr document
 
         solr = {
           id: id,
 
-          depositor_tesi: depositor_tesi,
-          collection_tesi: collection_tesi,
-          phys_coll_id_tesi: phys_coll_id_tesi,
-          steward_tesi: steward_tesi,
+          depositor_ssi: depositor_ssi,
+          collection_ssi: collection_ssi,
+          phys_coll_id_ssi: phys_coll_id_ssi,
+          steward_ssi: steward_ssi,
           filename_ssi: filename_ssi,
           fullpath_ssi: fullpath_ssi,
           location_ssm: location_ssm,
-          partOf_tesi: partOf_tesi,
+          partOf_ssi: partOf_ssi,
           bibid_ssi: bibid_ssi,
           rmcmediano_ssi: rmcmediano_ssi,
           sha1_tesig: sha1_tesig,
           md5_tesig: md5_tesig,
           size_lsi: size_lsi,
-          type_tesi: type_tesi
+          type_ssi: type_ssi,
+          shares_ssim: shares_ssim
         }
 
         solrdocs << solr
@@ -135,7 +146,47 @@ namespace :manifest do
 
     puts JSON.pretty_generate(solrdocs)
   end
-           
+
+  desc "Import SOLR documents into SOLR"
+  task "import" do
+    options = {}
+    parser = OptionParser.new do |opts|
+      opts.banner = "Usage: rake manifest:convert -- [options]"
+      opts.on("-m", "--manifest {jsonfile}", "Old format JSON manifest", String) do |manifest|
+        options[:manifest] = manifest
+      end
+      opts.on("-u", "--url {solrUrl}", "URL of SOLR index", String) do |url|
+        options[:url] = url
+      end
+    end
+
+    args = parser.order!(ARGV) {}
+    parser.parse!(args)
+        
+    file = File.read(options[:manifest])
+    manifest = JSON.parse(file)
+
+    puts options[:url]
+
+    solr = RSolr.connect url: options[:url]
+
+    puts "uri: #{solr.uri}"
+    puts "base_request_uri: #{solr.base_request_uri}"
+    puts "base_uri: #{solr.base_uri}"
+
+    # exit
+    $stdout.sync = true
+    manifest.each do |doc|
+      solr.add doc
+      print "."
+    end
+
+    puts "committing"
+    solr.commit
+
+    puts "solr documents added."
+    
+  end           
 end
 
     
