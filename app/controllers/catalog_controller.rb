@@ -51,7 +51,7 @@ class CatalogController < ApplicationController
     # :index_range can be an array or range of prefixes that will be used to create the navigation (note: It is case sensitive when searching values)
 
     config.add_facet_field 'depositor_ssi', label: 'Depositor'
-    config.add_facet_field 'collection_ssi', label: 'Colllection'
+    config.add_facet_field 'collection_ssi', label: 'Collection'
     config.add_facet_field 'type_ssi', label: 'Type'
     config.add_facet_field 'shares_ssim', label: 'Share'
 
