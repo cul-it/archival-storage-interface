@@ -50,9 +50,10 @@ class CatalogController < ApplicationController
     #  (useful when user clicks "more" on a large facet and wants to navigate alphabetically across a large set of results)
     # :index_range can be an array or range of prefixes that will be used to create the navigation (note: It is case sensitive when searching values)
 
-    config.add_facet_field 'depositor_tesi', label: 'Depositor'
-    config.add_facet_field 'collection_tesi', label: 'Colllection'
-    config.add_facet_field 'type_tesi', label: 'Type'
+    config.add_facet_field 'depositor_ssi', label: 'Depositor'
+    config.add_facet_field 'collection_ssi', label: 'Collection'
+    config.add_facet_field 'type_ssi', label: 'Type'
+    config.add_facet_field 'shares_ssim', label: 'Share'
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -61,21 +62,28 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
-    config.add_index_field 'depositor_tesi', label: 'Depositor'
-    config.add_index_field 'collection_tesi', label: 'Collection'
-    config.add_index_field 'type_tesi', label: 'Type'
+    config.add_index_field 'depositor_ssi', label: 'Depositor'
+    config.add_index_field 'collection_ssi', label: 'Collection'
+    config.add_index_field 'type_ssi', label: 'Type'
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
-    config.add_show_field 'depositor_tesi', label: 'Depositor'
-    config.add_show_field 'collection_tesi', label: 'Collection'
+    config.add_show_field 'depositor_ssi', label: 'Depositor'
+    config.add_show_field 'collection_ssi', label: 'Collection'
+    config.add_show_field 'phys_coll_id_ssi', label: 'Physical Collection'
+    config.add_show_field 'steward_ssi', label: 'Steward'
     config.add_show_field 'filename_ssi', label: 'Filename'
     config.add_show_field 'fullpath_ssi', label: 'Full Path'
     config.add_show_field 'location_ssm', label: 'Locations'
-    config.add_show_field 'steward_ssi', label: 'Steward'
-    config.add_show_field 'size_lsi', label: 'File Size'
+    config.add_show_field 'partOf_ssi', label: 'Part Of'
     config.add_show_field 'bibid_ssi', label: 'Bibid'
+    config.add_show_field 'rmcmediano_ssi', label: "RMC Media No"
+    config.add_show_field 'sha1_tesig', label: 'Sha1'
+    config.add_show_field 'md5_tesig', label: 'MD5'
+    config.add_show_field 'size_lsi', label: 'File Size'
     config.add_show_field 'type_tesi', label: 'File Type'
+    config.add_show_field 'shares_ssim', lable: 'Shares'
+    
 
     
     # "fielded" search configuration. Used by pulldown among other places.
@@ -106,8 +114,8 @@ class CatalogController < ApplicationController
 
     config.add_search_field("File Type") do |field|
       field.solr_parameters = {
-        qf: 'type_tesi',
-        pf: 'type_tesi'
+        qf: 'type_tei',
+        pf: 'type_tei'
       }
     end
 
