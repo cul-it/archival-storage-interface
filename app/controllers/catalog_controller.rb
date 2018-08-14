@@ -50,10 +50,10 @@ class CatalogController < ApplicationController
     #  (useful when user clicks "more" on a large facet and wants to navigate alphabetically across a large set of results)
     # :index_range can be an array or range of prefixes that will be used to create the navigation (note: It is case sensitive when searching values)
 
+    config.add_facet_field 'shares_ssim', label: 'Share'
     config.add_facet_field 'depositor_ssi', label: 'Depositor'
     config.add_facet_field 'collection_ssi', label: 'Collection'
     config.add_facet_field 'type_ssi', label: 'Type'
-    config.add_facet_field 'shares_ssim', label: 'Share'
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
