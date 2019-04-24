@@ -3,66 +3,113 @@
 require 'json'
 require 'optparse'
 require 'pp'
+require 'pathname'
+
+def create_solr_doc(collection, file, package)
+  filepath = file['filepath']
+  sha1_tesig = file['sha1']
+  size_lsi = file['size']
+
+  # package_id is of form "urn:uuid:00112233-4455-6677-8899-aabbccddeeff"
+  # this converts to a path prefix of "00/11/2233445566778899aabbccddeeff"
+
+  urn = package['package_id']
+  package_prefix = "#{urn[9..10]}/#{urn[11..12]}/#{urn[13..16]}#{urn[18..21]}#{urn[23..26]}#{urn[28..31]}#{urn[33..-1]}"
+
+  fullpath_ssi = "#{package_prefix}/#{filepath}"
+
+  all_locations = ((collection['locations'] || []) + (package['locations'] || []))
+                  .map { |location| "#{location}/#{fullpath_ssi}" }
+
+  id = Digest::MD5.hexdigest(fullpath_ssi)
+
+  shares_ssim = []
+  all_locations.each do |l|
+    if /(?<share>archival\d\d)/ =~ l
+      shares_ssim.push share
+    end
+  end
+
+  {
+    id: id,
+    # collection-level stuff
+    collection_ssi: collection['collection_id'],
+    depositor_ssi: collection['depositor'],
+    steward_ssi: (collection['steward'] || 'No collection steward'),
+    rights_ssi: collection['rights'],
+    # package-level stuff
+    packageid_tesig: package['package_id'],
+    bibid_ssi: (package['bibid'] || 'No bibid'),
+    localid_ssi: (package['local_id'] || ' No local id'),
+    shares_ssim: shares_ssim,
+    # file-level stuff
+    filepath_ssi: filepath,
+    filename_ssi: File.basename(fullpath_ssi),
+    fullpath_ssi: fullpath_ssi,
+    sha1_tesig: sha1_tesig,
+    size_lsi: size_lsi,
+
+    location_ssm: all_locations
+  }
+end
 
 namespace :manifest do
-
-  desc "Convert from old JSON format to new"
+  desc 'Convert from old JSON format to new'
   task :convert do
     options = {}
     parser = OptionParser.new do |opts|
-      opts.banner = "Usage: rake manifest:convert -- [options]"
-      opts.on("-m", "--manifest {jsonfile}", "Old format JSON manifest", String) do |manifest|
+      opts.banner = 'Usage: rake manifest:convert -- [options]'
+      opts.on('-m', '--manifest {jsonfile}', 'Old format JSON manifest', String) do |manifest|
         options[:manifest] = manifest
       end
     end
 
     args = parser.order!(ARGV) {}
     parser.parse!(args)
-        
+
     file = File.read(options[:manifest])
     manifest = JSON.parse(file)
 
     # the "collection" key has both the depositor and collection
     depcollection = manifest.keys[0]
-    
+
     newmanifest = {}
-    newmanifest["collection"] = depcollection
+    newmanifest['collection'] = depcollection
 
     coll = manifest[depcollection]
-    newmanifest["steward"]      = coll["steward"]
-    newmanifest["number_files"] = coll["number_files"]
-    newmanifest["locations"]    = coll["locations"].map { |k,v| v[0]["uri"] }
-    newmanifest["files"]        = []
+    newmanifest['steward']      = coll['steward']
+    newmanifest['number_files'] = coll['number_files']
+    newmanifest['locations']    = coll['locations'].map { |_k, v| v[0]['uri'] }
+    newmanifest['files']        = []
 
     # The "items" key has path and file information.
 
     files = []
-    items = coll["items"]
-    items.each do | path, dir |
-      dir.each do | filename, filedata |
+    items = coll['items']
+    items.each do |path, dir|
+      dir.each do |filename, filedata|
         files << {
           filename: filename,
           path: path,
           locations: [],
-          bibid: filedata["bibid"],
-          sha1: filedata["sha1"],
-          md5: filedata["md5"],
-          size: filedata["size"],
+          bibid: filedata['bibid'],
+          sha1: filedata['sha1'],
+          md5: filedata['md5'],
+          size: filedata['size']
         }
       end
-     end
-    newmanifest["files"] = files
-      
+    end
+    newmanifest['files'] = files
 
     puts JSON.pretty_generate([newmanifest])
   end
 
-  desc "Convert from new JSON format to SOLR documents"
+  desc 'Convert from new JSON format to SOLR documents'
   task :solrize do
     options = {}
     parser = OptionParser.new do |opts|
-      opts.banner = "Usage: rake manifest:solrize -- [options]"
-      opts.on("-m", "--manifest {jsonfile}", "New format JSON manifest", String) do |manifest|
+      opts.banner = 'Usage: rake manifest:solrize -- [options]'
+      opts.on('-m', '--manifest {jsonfile}', 'New format JSON manifest', String) do |manifest|
         options[:manifest] = manifest
       end
     end
@@ -71,98 +118,41 @@ namespace :manifest do
     parser.parse!(args)
 
     file = File.read(options[:manifest])
-    manifest = JSON.parse(file)
-
     # manifest consists of an array of collections
 
     solrdocs = []
 
-    manifest.each do |collection|
+    # TODO: Manifest is a single collection, not array of collections.
+    # See https://github.com/cul-it/cular-metadata for details
 
-      # the "collection" key has both the depositor and collection
-      depcollection = collection["collection"]
+    collection = JSON.parse(file)
 
-      # split it on last /, so a depositor collection of A/B/C should have depositor A/B, collection C
-      matchdata = /(.*)\/([^\/]*)/.match(depcollection)
-      (depositor_ssi, collection_ssi) = matchdata[1,2]
-
-      phys_coll_id_ssi = collection["phys_coll_id"] || "No physical collection"
-      steward_ssi = collection["steward"] || "No collection steward"
-      collection_locations = collection["locations"]
-
-      files = collection["files"]
-
-      files.each do |file|
-        filename_ssi = file["filename"]
-        fullpath_ssi = file["path"] + "/" + filename_ssi
-        location_ssm = collection_locations + (file["locations"] || [])
-        partOf_ssi = file["partOf"]
-        bibid_ssi = file["bibid"]
-        rmcmediano_ssi = file["rmcmediano"]
-        sha1_tesig = file["sha1"]
-        md5_tesig = file["md5"]
-        size_lsi = file["size"]
-
-        rawid = "#{depcollection}/#{fullpath_ssi}"
-        id = Digest::MD5.hexdigest(rawid)
-
-        type_ssi = filename_ssi[-3..-1] || filename_ssi
-
-        # find the archival shares
-
-        shares_ssim = []
-        location_ssm.each do |l|
-          if /(?<share>archival\d\d)/ =~ l then
-            shares_ssim.push share
-          end
-        end
-
-        # now put it into a solr document
-
-        solr = {
-          id: id,
-
-          depositor_ssi: depositor_ssi,
-          collection_ssi: collection_ssi,
-          phys_coll_id_ssi: phys_coll_id_ssi,
-          steward_ssi: steward_ssi,
-          filename_ssi: filename_ssi,
-          fullpath_ssi: fullpath_ssi,
-          location_ssm: location_ssm,
-          partOf_ssi: partOf_ssi,
-          bibid_ssi: bibid_ssi,
-          rmcmediano_ssi: rmcmediano_ssi,
-          sha1_tesig: sha1_tesig,
-          md5_tesig: md5_tesig,
-          size_lsi: size_lsi,
-          type_ssi: type_ssi,
-          shares_ssim: shares_ssim
-        }
-
-        solrdocs << solr
-
+    # Collection-level fields from manifest
+    collection['packages'].each do |package|
+      package['files'].each do |file|
+        solrdocs << create_solr_doc(collection, file, package)
       end
     end
 
     puts JSON.pretty_generate(solrdocs)
   end
 
-  desc "Import SOLR documents into SOLR"
-  task "import" do
+  desc 'Import SOLR documents into SOLR'
+  task 'import' do
     options = {}
     parser = OptionParser.new do |opts|
-      opts.banner = "Usage: rake manifest:convert -- [options]"
-      opts.on("-m", "--manifest {jsonfile}", "Old format JSON manifest", String) do |manifest|
+      opts.banner = 'Usage: rake manifest:convert -- [options]'
+      opts.on('-m', '--manifest {jsonfile}', 'Old format JSON manifest', String) do |manifest|
         options[:manifest] = manifest
       end
-      opts.on("-u", "--url {solrUrl}", "URL of SOLR index", String) do |url|
+      opts.on('-u', '--url {solrUrl}', 'URL of SOLR index', String) do |url|
         options[:url] = url
       end
     end
 
     args = parser.order!(ARGV) {}
     parser.parse!(args)
-        
+
     file = File.read(options[:manifest])
     manifest = JSON.parse(file)
 
@@ -178,15 +168,12 @@ namespace :manifest do
     $stdout.sync = true
     manifest.each do |doc|
       solr.add doc
-      print "."
+      print '.'
     end
 
-    puts "committing"
+    puts 'committing'
     solr.commit
 
-    puts "solr documents added."
-    
-  end           
+    puts 'solr documents added.'
+  end
 end
-
-    
