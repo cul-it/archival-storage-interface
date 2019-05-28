@@ -16,7 +16,9 @@ def create_solr_doc(collection, file, package)
   urn = package['package_id']
   package_prefix = "#{urn[9..10]}/#{urn[11..12]}/#{urn[13..16]}#{urn[18..21]}#{urn[23..26]}#{urn[28..31]}#{urn[33..-1]}"
 
-  fullpath_ssi = "#{package_prefix}/#{filepath}"
+  # ultimately we'll want to include the package in the path, but not yet
+  # fullpath_ssi = "#{package_prefix}/#{filepath}"
+  fullpath_ssi = "#{filepath}"
 
   all_locations = ((collection['locations'] || []) + (package['locations'] || []))
                   .map { |location| "#{location}/#{fullpath_ssi}" }
@@ -121,9 +123,6 @@ namespace :manifest do
     # manifest consists of an array of collections
 
     solrdocs = []
-
-    # TODO: Manifest is a single collection, not array of collections.
-    # See https://github.com/cul-it/cular-metadata for details
 
     collection = JSON.parse(file)
 

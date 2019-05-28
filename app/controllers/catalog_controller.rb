@@ -83,6 +83,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'size_lsi', label: 'File Size'
     config.add_show_field 'type_tesi', label: 'File Type'
     config.add_show_field 'shares_ssim', lable: 'Shares'
+    config.add_show_field 'packageid_tesig', lable: "Package ID"
     
 
     
@@ -112,10 +113,10 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field("File Type") do |field|
+    config.add_search_field("Package Id") do |field|
       field.solr_parameters = {
-        qf: 'type_tei',
-        pf: 'type_tei'
+        qf: 'packageid_tesig',
+        pf: 'packageid_tesig'
       }
     end
 
