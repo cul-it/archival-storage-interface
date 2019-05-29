@@ -40,7 +40,7 @@ def create_solr_doc(collection, file, package)
     steward_ssi: (collection['steward'] || 'No collection steward'),
     rights_ssi: collection['rights'],
     # package-level stuff
-    packageid_tesig: package['package_id'],
+    packageid_ssi: package['package_id'],
     bibid_ssi: (package['bibid'] || 'No bibid'),
     localid_ssi: (package['local_id'] || ' No local id'),
     shares_ssim: shares_ssim,
