@@ -54,6 +54,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'depositor_ssi', label: 'Depositor'
     config.add_facet_field 'collection_ssi', label: 'Collection'
     config.add_facet_field 'type_ssi', label: 'Type'
+    config.add_facet_field 'packageid_ssi', label: "Package ID", show: false
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -83,6 +84,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'size_lsi', label: 'File Size'
     config.add_show_field 'type_tesi', label: 'File Type'
     config.add_show_field 'shares_ssim', lable: 'Shares'
+    config.add_show_field 'packageid_ssi', label: "Package ID", link_to_search: true
     
 
     
@@ -112,10 +114,10 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field("File Type") do |field|
+    config.add_search_field("Package Id") do |field|
       field.solr_parameters = {
-        qf: 'type_tei',
-        pf: 'type_tei'
+        qf: 'packageid_ssi',
+        pf: 'packageid_ssi'
       }
     end
 
